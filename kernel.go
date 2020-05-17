@@ -16,6 +16,7 @@ import (
 func testIscnKernel(
 	ctx context.Context,
 	ipfs icore.CoreAPI,
+	rights iscn.IscnObject,
 	stakeholders iscn.IscnObject,
 	content iscn.IscnObject,
 ) {
@@ -29,6 +30,7 @@ func testIscnKernel(
 		"id":           id,
 		"timestamp":    "2020-01-01T12:34:56Z",
 		"version":      1,
+		"rights":       rights.Cid(),
 		"stakeholders": stakeholders.Cid(),
 		"content":      content.Cid(),
 		"zzz":          -987654321,
@@ -104,6 +106,16 @@ func testIscnKernel(
 
 	if val, err := obj.GetUint64("version"); err == nil {
 		log.Printf("  Version: %d", val)
+	} else {
+		log.Panicf("%s", err)
+	}
+
+	if val, err := obj.GetCid("rights"); err == nil {
+		c, err := val.StringOfBase('z')
+		if err != nil {
+			log.Panicf("Cannot retrieve CID from block: %s", err)
+		}
+		log.Printf("  Rights: %s (0x%x)", c, val.Type())
 	} else {
 		log.Panicf("%s", err)
 	}

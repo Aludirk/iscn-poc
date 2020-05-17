@@ -179,9 +179,10 @@ func main() {
 	log.Println("IPFS node is created")
 
 	entities := testEntity(ctx, ipfs)
+	rights := testRights(ctx, ipfs, entities)
 	stakeholders := testStakeholders(ctx, ipfs, entities)
 	content := testContent(ctx, ipfs)
-	testIscnKernel(ctx, ipfs, stakeholders, content)
+	testIscnKernel(ctx, ipfs, rights, stakeholders, content)
 
 	cms.Commit()
 
